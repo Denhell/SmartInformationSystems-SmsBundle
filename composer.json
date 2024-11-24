@@ -1,5 +1,5 @@
 {
-    "name" : "denhell/smartinformationsystems-sms-bundle",
+    "name" : "denhell/smartinformationsystems-smsbundle",
     "description" : "SMS bundle",
     "type" : "symfony-bundle",
     "authors" : [
