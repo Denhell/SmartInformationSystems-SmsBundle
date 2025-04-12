@@ -6,96 +6,86 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Лог обращения к транспорту.
- *
- * @ORM\Entity
- * @ORM\Table(name="sis_sms_request_log")
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'sis_sms_request_log')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class SmsRequestLog
 {
     /**
      * Идентификатор.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
     /**
      * Смс.
      *
      * @var Sms
-     *
-     * @ORM\ManyToOne(targetEntity="Sms")
-     * @ORM\JoinColumn(name="sms_id", referencedColumnName="id", nullable=true)
      */
-    private $sms;
+    #[ORM\JoinColumn(name: 'sms_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Sms::class)]
+    private ?\SmartInformationSystems\SmsBundle\Entity\Sms $sms = null;
 
     /**
      * Транспорт.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $transport;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $transport;
 
     /**
      * Запрос.
      *
      * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
      */
-    private $request;
+    #[ORM\Column(type: 'text', nullable: false)]
+    private string $request;
 
     /**
      * Дата запроса.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="request_at", type="datetime", nullable=false)
+     * @var \DateTimeInterface
      */
-    private $requestAt;
+    #[ORM\Column(name: 'request_at', type: 'datetime', nullable: false)]
+    private \DateTimeInterface $requestAt;
 
     /**
      * Ответ.
      *
      * @var string
-     *
-     * @ORM\Column(type="text", nullable=true)
      */
-    private $response;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $response = null;
 
     /**
      * Дата ответа.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="response_at", type="datetime", nullable=true)
+     * @var \DateTimeInterface
      */
-    private $responseAt;
+    #[ORM\Column(name: 'response_at', type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $responseAt = null;
 
     /**
      * Дата создания.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @var \DateTimeInterface
      */
-    private $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    private \DateTimeInterface $createdAt;
 
     /**
      * Дата последнего изменения.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @var \DateTimeInterface
      */
-    private $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     /**
      * Конструктор.
@@ -309,9 +299,8 @@ class SmsRequestLog
 
     /**
      * Автоматическая установка даты создания.
-     *
-     * @ORM\PrePersist
      */
+    #[ORM\PrePersist]
     public function prePersistHandler()
     {
         $this->setCreatedAt(new \DateTime());
@@ -319,9 +308,8 @@ class SmsRequestLog
 
     /**
      * Автоматическая установка даты обновления.
-     *
-     * @ORM\PreUpdate
      */
+    #[ORM\PreUpdate]
     public function preUpdateHandler()
     {
         $this->setUpdatedAt(new \DateTime());
