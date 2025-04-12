@@ -2,7 +2,7 @@
 namespace SmartInformationSystems\SmsBundle\Command;
 
 use SmartInformationSystems\SmsBundle\Repository\SmsRepository;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,7 +12,7 @@ use SmartInformationSystems\SmsBundle\Transport\AbstractTransport;
 
 use SmartInformationSystems\SmsBundle\Exception\NotAllowedPhoneTransportException;
 
-class SmsSendCommand extends ContainerAwareCommand
+class SmsSendCommand extends Command
 {
     const LIMIT_DEFAULT = 100;
 
@@ -56,7 +56,7 @@ class SmsSendCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queue = $this->repository->getForSending($this->limit);
 
@@ -66,5 +66,7 @@ class SmsSendCommand extends ContainerAwareCommand
             } catch (NotAllowedPhoneTransportException $e) {
             }
         }
+
+        return Command::SUCCESS;
     }
 }

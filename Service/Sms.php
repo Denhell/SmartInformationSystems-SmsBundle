@@ -2,9 +2,11 @@
 
 namespace SmartInformationSystems\SmsBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
+use Twig\Environment;
 
 use SmartInformationSystems\SmsBundle\Transport\AbstractTransport;
 use SmartInformationSystems\SmsBundle\Transport\TransportFactory;
@@ -23,41 +25,25 @@ class Sms
     private $transport;
 
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var EngineInterface
-     */
-    private $templating;
-
-    /**
      * От кого отправлять сообщения.
      *
      * @var string
      */
     private $defaultFrom;
 
-    /**
-     * Конструктор.
-     *
-     * @param ConfigurationContainer $configuration
-     * @param ContainerInterface $container
-     * @param EngineInterface $templating
-     *
-     * @throws
-     */
-    public function __construct(ConfigurationContainer $configuration, ContainerInterface $container, EngineInterface $templating)
+    public function __construct(
+        private ConfigurationContainer $configuration,
+        private ContainerInterface $container,
+        private Environment $templating,
+        private EntityManagerInterface $entityManager
+    )
     {
-        $this->container = $container;
-        $this->templating = $templating;
 
         $this->defaultFrom = $configuration->getFrom();
 
         $this->transport = TransportFactory::create(
             $configuration,
-            $this->container->get('doctrine')->getEntityManager()
+            $this->entityManager
         );
     }
 
@@ -88,7 +74,7 @@ class Sms
             );
 
         /** @var EntityManager $em */
-        $em = $this->container->get('doctrine')->getEntityManager();
+        $em = $this->entityManager;
         $em->persist($sms);
         $em->flush($sms);
 

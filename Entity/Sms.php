@@ -6,122 +6,104 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Смс в очереди на отправку.
- *
- * @ORM\Entity(repositoryClass="SmartInformationSystems\SmsBundle\Repository\SmsRepository")
- * @ORM\Table(
- *   name="sis_sms",
- *   indexes={
- *     @ORM\Index(name="i_sent", columns={"is_sent"}),
- *     @ORM\Index(name="i_phone", columns={"phone"})
- *   },
- *   uniqueConstraints={
- *     @ORM\UniqueConstraint(name="ui_transport_external_id", columns={"transport", "external_id"})
- *   }
- * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'sis_sms')]
+#[ORM\Index(name: 'i_sent', columns: ['is_sent'])]
+#[ORM\Index(name: 'i_phone', columns: ['phone'])]
+#[ORM\UniqueConstraint(name: 'ui_transport_external_id', columns: ['transport', 'external_id'])]
+#[ORM\Entity(repositoryClass: \SmartInformationSystems\SmsBundle\Repository\SmsRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Sms
 {
     /**
      * Идентификатор.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
     /**
      * Транспорт.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $transport;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $transport;
 
     /**
      * Идентификатор в транспорте.
      *
      * @var string
-     *
-     * @ORM\Column(name="external_id", type="string", length=255, nullable=true)
      */
-    private $externalId;
+    #[ORM\Column(name: 'external_id', type: 'string', length: 255, nullable: true)]
+    private ?string $externalId = null;
 
     /**
      * Телефон получателя.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $phone;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $phone;
 
     /**
      * Сообщение.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $message;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $message;
 
     /**
      * Имя отправителя.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false, name="from_name")
      */
-    private $fromName;
+    #[ORM\Column(type: 'string', length: 255, nullable: false, name: 'from_name')]
+    private string $fromName;
 
     /**
      * Отправлено ли.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_sent")
      */
-    private $isSent;
+    #[ORM\Column(type: 'boolean', name: 'is_sent')]
+    private ?bool $isSent = null;
 
     /**
      * Последняя ошибка.
      *
      * @var string
-     *
-     * @ORM\Column(name="last_error", type="string", length=255, nullable=true)
      */
-    private $lastError;
+    #[ORM\Column(name: 'last_error', type: 'string', length: 255, nullable: true)]
+    private ?string $lastError = null;
 
     /**
      * Дата отправки.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sent_at", type="datetime", nullable=true)
+     * @var \DateTimeInterface
      */
-    private $sentAt;
+    #[ORM\Column(name: 'sent_at', type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $sentAt = null;
 
     /**
      * Дата создания.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @var \DateTimeInterface
      */
-    private $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    private \DateTimeInterface $createdAt;
 
     /**
      * Дата последнего изменения.
      *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @var \DateTimeInterface
      */
-    private $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     /**
      * Конструктор.
@@ -359,9 +341,8 @@ class Sms
 
     /**
      * Автоматическая установка даты создания.
-     *
-     * @ORM\PrePersist
      */
+    #[ORM\PrePersist]
     public function prePersistHandler()
     {
         $this->setCreatedAt(new \DateTime());
@@ -369,9 +350,8 @@ class Sms
 
     /**
      * Автоматическая установка даты обновления.
-     *
-     * @ORM\PreUpdate
      */
+    #[ORM\PreUpdate]
     public function preUpdateHandler()
     {
         $this->setUpdatedAt(new \DateTime());

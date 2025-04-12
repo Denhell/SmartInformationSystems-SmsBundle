@@ -10,4 +10,5 @@ services:
         arguments:
             - '@smart_information_systems_sms.transport.configuration_container'
             - '@service_container'
-            - '@templating'
+            - '@twig'
+            - '@doctrine.orm.entity_manager'
